@@ -24,7 +24,7 @@ Movies = db.graph('Movies')
 # is_heroine = Movies.edge_collection('is_heroine')
 # is_villain = Movies.edge_collection('is_villain')
 
-# traverse from hero outbound
+# traverse from Keanu outbound
 trv = Movies.traverse(
     start_vertex='actors/Keanu',
     direction='outbound',
