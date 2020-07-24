@@ -33,9 +33,12 @@ print("\nAll movies ::")
 for film in films:
     print(film['title'], end=" ")
 
+
 # 2. movie list of given 2 actors
 actor_list = input("\nEnter actor first-names separated by commas : ")
 actor_list = actor_list.split(',')
+
+movie_list = []
 
 for actor in actor_list:
     start_vertex = 'actors/{}'.format(actor)
@@ -51,14 +54,61 @@ for actor in actor_list:
 
     vertices = movie_traversal['vertices']
 
-    print("For {}, movies are :: ".format(actor), end=" ")
+    temp_list = []
     for i in range(1, len(vertices)):
         if 'film' in vertices[i]['_id']:
-            print(vertices[i]['title'], end=" ")
+            temp_list.append(vertices[i]['title'])
 
-    print("\n")
+    movie_list.append(set(temp_list))
+
+print("Common movies of actors are ::", end=" ")
+print(set.intersection(*movie_list))
+
 
 # 3. movie list of given actor, director
+actor = input("Enter actor : ")
+director = input("Enter director : ")
+start_vertex_actor = 'actors/{}'.format(actor)
+start_vertex_director = 'directors/{}'.format(director)
+
+common_movie_list = []
+
+# traverse from actor outbound
+act_traversal = Movies.traverse(
+    start_vertex=start_vertex_actor,
+    direction='outbound',
+    strategy='bfs',
+    edge_uniqueness='global',
+    vertex_uniqueness='global'
+)
+
+actor_vertices = act_traversal['vertices']
+temp_list = []
+for i in range(1, len(actor_vertices)):
+    if 'film' in actor_vertices[i]['_id']:
+        temp_list.append(actor_vertices[i]['title'])
+
+common_movie_list.append(set(temp_list))
+
+# traverse from actor inbound
+dir_traversal = Movies.traverse(
+    start_vertex=start_vertex_director,
+    direction='outbound',
+    strategy='bfs',
+    edge_uniqueness='global',
+    vertex_uniqueness='global'
+    )
+
+dir_vertices = dir_traversal['vertices']
+temp_list = []
+for i in range(1, len(dir_vertices)):
+    if 'film' in dir_vertices[i]['_id']:
+        temp_list.append(dir_vertices[i]['title'])
+
+common_movie_list.append(set(temp_list))
+
+print("Common movies of actor and director are ::", end=" ")
+print(set.intersection(*common_movie_list))
 
 
 # 4. list of directors the actor done movies with
