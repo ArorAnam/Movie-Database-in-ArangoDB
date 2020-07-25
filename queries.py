@@ -132,6 +132,7 @@ for i in range(1, len(vertices)):
         film.append(vertices[i]['_id'])
 
 # traverse for  directors
+uniq_dir = set()
 for k in range(len(film)):
     start_vertex = film[k]
     dir_traversal = Movies.traverse(
@@ -146,6 +147,6 @@ for k in range(len(film)):
 
     for i in range(1, len(vert)):
         if 'directors' in vert[i]['_id']:
-            print(vert[i]['name'], end=" ")
+            uniq_dir.add(vert[i]['name'])
 
-    print("\n")
+print(uniq_dir)
